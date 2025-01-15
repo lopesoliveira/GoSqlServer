@@ -1,8 +1,6 @@
 package repository
 
-import (
-	"github.com/lopesoliveira/GoSqlServer/model"
-)
+import "github.com/lopesoliveira/GoSqlServer/model"
 
 type GormSqlServerRepository interface {
 	Save(user model.User)
