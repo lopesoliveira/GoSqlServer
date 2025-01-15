@@ -13,7 +13,7 @@ const (
 	port     = 1433
 	user     = "sonarsqlauth"
 	password = "Eqs2024."
-	dbName   = "sonar"
+	dbName   = "GormSqlServer"
 )
 
 func DatabaseConnection() *gorm.DB {

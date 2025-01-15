@@ -43,8 +43,16 @@ func (u *GormSqlServerServiceImpl) Update(user request.UpdateUserRequest) {
 	u.GormSqlServerRepository.Update(userData)
 }
 
-func (u *GormSqlServerServiceImpl) Delete(userId int) {
-	u.GormSqlServerRepository.Delete(userId)
+func (u *GormSqlServerServiceImpl) Delete(userId int) response.DeleteResponse {
+	deleteResponse := response.DeleteResponse{Success: true}
+	result, err := u.GormSqlServerRepository.Delete(userId)
+	if err != nil {
+		//helper.ErrorPanic(err)
+		deleteResponse.Success = false
+		return deleteResponse
+	}
+	deleteResponse.Success = result
+	return deleteResponse
 }
 
 func (u *GormSqlServerServiceImpl) FindById(userId int) response.UserResponse {

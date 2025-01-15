@@ -7,7 +7,7 @@ import (
 type GormSqlServerRepository interface {
 	Save(user model.User)
 	Update(user model.User)
-	Delete(userId int)
-	FindById(userId int) (user model.User, err error)
+	Delete(userId int) (bool, error)
+	FindById(userId int) (model.User, error)
 	FindAll() []model.User
 }

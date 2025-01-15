@@ -32,10 +32,21 @@ func (u GormSqlServerRepositoryImpl) Update(user model.User) {
 	helper.ErrorPanic(result.Error)
 }
 
-func (u GormSqlServerRepositoryImpl) Delete(userId int) {
+func (u GormSqlServerRepositoryImpl) Delete(userId int) (bool, error) {
 	var user model.User
 	result := u.Db.Where("id = ?", userId).Delete(&user)
-	helper.ErrorPanic(result.Error)
+
+	if result.RowsAffected > 0 {
+		return true, nil
+	} else {
+		return false, errors.New("failed to delete user")
+	}
+
+	/*if result != nil {
+		return true, nil
+	} else {
+		return false, errors.New("failed to delete user")
+	}*/
 }
 
 func (u GormSqlServerRepositoryImpl) FindById(userId int) (model.User, error) {

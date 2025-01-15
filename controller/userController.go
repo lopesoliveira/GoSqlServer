@@ -20,20 +20,20 @@ func NewUsersController(service service.GormSqlServerService) *UsersController {
 	}
 }
 
-// CreateTags		godoc
-// @Summary			Create tags
-// @Description		Save tags data in Db.
-// @Param			tags body request.CreateTagsRequest true "Create tags"
+// CreateUser		godoc
+// @Summary			Create User
+// @Description		Save user data in Db.
+// @Param			user body request.CreateUserRequest true "Create user"
 // @Produce			application/json
-// @Tags			tags
-// @Success			200 {object} response.Response{}
-// @Router			/tags [post]
+// @Tags			user
+// @Success			200 {object} response.UserResponse{}
+// @Router			/user [post]
 func (controller *UsersController) Create(ctx *gin.Context) {
-	createTagRequest := request.CreateUserRequest{}
-	err := ctx.ShouldBindJSON(&createTagRequest)
+	createUserRequest := request.CreateUserRequest{}
+	err := ctx.ShouldBindJSON(&createUserRequest)
 	helper.ErrorPanic(err)
 
-	controller.gormSqlServerService.Create(createTagRequest)
+	controller.gormSqlServerService.Create(createUserRequest)
 
 	webResponse := response.UserResponse{}
 
@@ -41,21 +41,21 @@ func (controller *UsersController) Create(ctx *gin.Context) {
 }
 
 // UpdateTags		godoc
-// @Summary			Update tags
-// @Description		Update tags data.
-// @Param			tagId path string true "update tags by id"
-// @Param			tags body request.CreateTagsRequest true  "Update tags"
-// @Tags			tags
+// @Summary			Update user
+// @Description		Update user data.
+// @Param			userId path string true "update user by id"
+// @Param			user body request.UpdateUserRequest true  "Update user"
+// @Tags			user
 // @Produce			application/json
-// @Success			200 {object} response.Response{}
-// @Router			/tags/{tagId} [patch]
+// @Success			200 {object} response.UserResponse{}
+// @Router			/user/{userId} [patch]
 func (controller *UsersController) Update(ctx *gin.Context) {
 	updateUserRequest := request.UpdateUserRequest{}
 	err := ctx.ShouldBindJSON(&updateUserRequest)
 	helper.ErrorPanic(err)
 
-	tagId := ctx.Param("tagId")
-	id, err := strconv.Atoi(tagId)
+	userId := ctx.Param("userId")
+	id, err := strconv.Atoi(userId)
 	helper.ErrorPanic(err)
 
 	updateUserRequest.Id = id
@@ -68,34 +68,36 @@ func (controller *UsersController) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, webResponse)
 }
 
-// DeleteTags		godoc
-// @Summary			Delete tags
-// @Description		Remove tags data by id.
+// DeleteUser		godoc
+// @Summary			Delete user
+// @Description		Remove user data by id.
+// @Param           userId path int true "User Id"
 // @Produce			application/json
-// @Tags			tags
-// @Success			200 {object} response.Response{}
-// @Router			/tags/{tagID} [delete]
+// @Tags			user
+// @Success			200 {object} response.DeleteResponse{}
+// @Router			/user/{userId} [delete]
 func (controller *UsersController) Delete(ctx *gin.Context) {
-	userId := ctx.Param("tagId")
+	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
 	helper.ErrorPanic(err)
-	controller.gormSqlServerService.Delete(id)
 
-	webResponse := response.UserResponse{}
+	success := controller.gormSqlServerService.Delete(id)
+
+	//success := response.UserResponse{}
 
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, success)
 
 }
 
 // FindByIdTags 		godoc
-// @Summary				Get Single tags by id.
-// @Param				tagId path string true "update tags by id"
-// @Description			Return the tahs whoes tagId valu mathes id.
+// @Summary				Get Single user by id.
+// @Param				userId path string true "find user by id"
+// @Description			Return the user whose userId value matches id.
 // @Produce				application/json
-// @Tags				tags
-// @Success				200 {object} response.Response{}
-// @Router				/tags/{tagId} [get]
+// @Tags				user
+// @Success				200 {object} response.UserResponse{}
+// @Router				/user/{userId} [get]
 func (controller *UsersController) FindById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
@@ -103,25 +105,30 @@ func (controller *UsersController) FindById(ctx *gin.Context) {
 
 	userResponse := controller.gormSqlServerService.FindById(id)
 
-	webResponse := response.UserResponse{
-		Id: userResponse.Id,
-	}
+	/*webResponse := response.UserResponse{
+		Id:       userResponse.Id,
+		Name:     userResponse.Name,
+		Email:    userResponse.Email,
+		Password: userResponse.Password,
+		Age:      userResponse.Age,
+	}*/
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, userResponse)
 }
 
 // FindAllTags 		godoc
-// @Summary			Get All tags.
-// @Description		Return list of tags.
-// @Tags			tags
-// @Success			200 {obejct} response.Response{}
-// @Router			/tags [get]
+// @Summary			Get All users.
+// @Description		Return list of users.
+// @Tags			users
+// @Success			200 {object} response.UserResponse{}
+// @Router			/user [get]
 func (controller *UsersController) FindAll(ctx *gin.Context) {
 	userResponse := controller.gormSqlServerService.FindAll()
 
-	webResponse := response.UserResponse{
+	/*webResponse := response.UserResponse{
 		Id: userResponse[0].Id,
-	}
+	}*/
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, userResponse)
 }
