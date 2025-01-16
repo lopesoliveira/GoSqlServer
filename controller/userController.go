@@ -83,8 +83,6 @@ func (controller *UsersController) Delete(ctx *gin.Context) {
 
 	success := controller.gormSqlServerService.Delete(id)
 
-	//success := response.UserResponse{}
-
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, success)
 
@@ -105,14 +103,6 @@ func (controller *UsersController) FindById(ctx *gin.Context) {
 
 	userResponse := controller.gormSqlServerService.FindById(id)
 
-	/*webResponse := response.UserResponse{
-		Id:       userResponse.Id,
-		Name:     userResponse.Name,
-		Email:    userResponse.Email,
-		Password: userResponse.Password,
-		Age:      userResponse.Age,
-	}*/
-
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, userResponse)
 }
@@ -126,9 +116,6 @@ func (controller *UsersController) FindById(ctx *gin.Context) {
 func (controller *UsersController) FindAll(ctx *gin.Context) {
 	userResponse := controller.gormSqlServerService.FindAll()
 
-	/*webResponse := response.UserResponse{
-		Id: userResponse[0].Id,
-	}*/
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, userResponse)
 }
